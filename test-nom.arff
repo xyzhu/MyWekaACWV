@@ -1,0 +1,23 @@
+@relation golf
+
+@attribute Outlook{Sunny,Overcast,Rainy}
+@attribute Temprature {High, Normal, Low}
+@attribute Humidity {High, Low}
+@attribute Windy{True,False}
+@attribute class{Yes,No}
+
+@data 
+Sunny High High False No
+Sunny High High True No
+Overcast High Low False Yes
+Rainy Normal High False Yes
+Rainy Low High False Yes
+Rainy Low Low True No
+Overcast Low Low True Yes
+Sunny Normal High False No
+Sunny Low Low False Yes
+Rainy Normal High False Yes
+Sunny Normal Low True Yes
+Overcast Normal High True Yes
+Overcast High Low False Yes
+Rainy Normal High True No
