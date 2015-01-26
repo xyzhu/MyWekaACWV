@@ -2,6 +2,7 @@ package weka.classifiers.mine;
 
 import java.util.LinkedList;
 
+
 public class TreeNode {
 
 	public int attr;

@@ -1,6 +1,8 @@
 
 package weka.classifiers.mine;
 
+import java.util.Iterator;
+
 import weka.associations.LabeledItemSet;
 import weka.classifiers.Classifier;
 import weka.core.FastVector;
@@ -45,6 +47,7 @@ public class ACWV extends Classifier{
 		fp = new CCFP();
 		//long t1 = System.currentTimeMillis();
 		t = fp.buildCCFPTree(m_instances, m_onlyClass, minsup, 1);
+		printtree(t.root);
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);
@@ -53,6 +56,18 @@ public class ACWV extends Classifier{
 		c++;
 	}
 	
+	private void printtree(TreeNode tn) {
+		if(tn==null)
+			return;
+		Iterator<TreeNode> it = (Iterator<TreeNode>) tn.child.iterator();
+		while(it.hasNext()){
+			TreeNode t = it.next();
+			System.out.println(t.attr+"   " +t.value+"    "+t.classcount[0]+","+t.classcount[1]);
+			printtree(t);
+		}
+		
+	}
+
 	public double classifyInstance(Instance instance)
 	{		
 		return 0;

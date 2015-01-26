@@ -2,6 +2,7 @@ package weka.classifiers.mine;
 
 import java.util.ArrayList;
 
+import weka.associations.ItemSet;
 import weka.associations.LabeledItemSet;
 import weka.core.FastVector;
 import weka.core.Instances;
@@ -33,25 +34,30 @@ public class HeaderTable {
 	    }
 
 	    // find item sets of length one
-	    kSets = LabeledItemSet.singletons(instances, onlyClass);
-	    LabeledItemSet.upDateCounters(kSets, instances, onlyClass);
+	    kSets = ItemSet.singletons(instances);
+	    ItemSet.upDateCounters(kSets, instances);
+	    /*for(int k=0;k<kSets.size();k++){
+	    	LabeledItemSet ls = (LabeledItemSet)kSets.elementAt(k);
+	    	System.out.println("good");
+	    	System.out.println(ls.itemAt(0)+","+ls.itemAt(1)+","+ls.itemAt(2)+","+ls.itemAt(3)+","+ls.counter());
+	    }*/
 
-	    // check if a item set of lentgh one is frequent, if not delete it
-	    kSets = LabeledItemSet.deleteItemSets(kSets, necSupport,
+	    // check if a item set of length one is frequent, if not delete it
+	    kSets = ItemSet.deleteItemSets(kSets, necSupport,
 	        instances.numInstances());
 	    if (kSets.size() == 0)
 	      return null;
-	    quicksort(kSets,0,kSets.size()-1);
 	    FastVector ht = Transform(kSets);
+	    quicksort(ht,0,ht.size()-1);
 	    return ht;
 	}
 	private FastVector Transform(FastVector kSets) {
 		FastVector ht = new FastVector();
-		LabeledItemSet ls;
+		ItemSet ls;
 		HeaderNode hn;
 		for(int i=0;i<kSets.size();i++){
 			hn = new HeaderNode();
-			ls = (LabeledItemSet) kSets.elementAt(i);
+			ls = (ItemSet) kSets.elementAt(i);
 			int items[] = ls.items();
 			for(int k=0;k<items.length;k++){
 				if (items[k]!=-1){
@@ -65,33 +71,33 @@ public class HeaderTable {
 		return ht;
 	}
 
-	private void quicksort(FastVector itemSets, int start, int end) {
+	private void quicksort(FastVector headertable, int start, int end) {
 		if  (start < end ){
-			int k = partition(itemSets, start, end );
-			quicksort(itemSets, start, k - 1);
-			quicksort(itemSets, k + 1, end);
+			int k = partition(headertable, start, end );
+			quicksort(headertable, start, k - 1);
+			quicksort(headertable, k + 1, end);
 		}
 	}
 
-	private int partition(FastVector itemSets, int start, int end) {
-		int pivot = ((LabeledItemSet)itemSets.elementAt(start)).counter();
+	private int partition(FastVector headertable, int start, int end) {
+		int pivot = ((HeaderNode)headertable.elementAt(start)).count;
 		int r = end;
 		int l = start;
 		while(l<r){
-			while(r>l&&((LabeledItemSet)itemSets.elementAt(r)).counter()>=pivot){
+			while(r>l&&((HeaderNode)headertable.elementAt(r)).count<=pivot){
 				r--;
 			}
-			while(r>l&&((LabeledItemSet)itemSets.elementAt(l)).counter()<=pivot){
+			while(r>l&&((HeaderNode)headertable.elementAt(l)).count>=pivot){
 				l++;
 			}
-			swap(itemSets,l,r);
+			swap(headertable,l,r);
 		}
-		swap(itemSets,start,l);
+		swap(headertable,start,l);
 		return l;
 	}
 
 	private void swap(FastVector sets, int l, int r) {
-		LabeledItemSet tmp = (LabeledItemSet)sets.elementAt(l);
+		HeaderNode tmp = (HeaderNode)sets.elementAt(l);
 		sets.setElementAt(sets.elementAt(r), l);
 		sets.setElementAt(tmp, r);
 		

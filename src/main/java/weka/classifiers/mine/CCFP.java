@@ -26,31 +26,39 @@ public class CCFP {
 		int classLabel;
 		Instance inst;
 		Tree t = new Tree(numClass);
+		for(int l=0;l<headertable.size();l++){
+			HeaderNode hn = (HeaderNode)headertable.elementAt(l);
+			System.out.println(hn.attr+"--"+hn.value+"--"+hn.count);
+		}
 		for(int i=0;i<numInstances;i++){
-			TreeNode root = t.root;
+			TreeNode currentnode = t.root;
 			inst = instances.instance(i);
 			classLabel = (int)onlyClass.instance(i).value(0);
 			for(int j=0;j<headertable.size();j++){
 				HeaderNode hn = (HeaderNode) headertable.elementAt(j);
-				TreeNode tnode = new TreeNode(hn.attr,hn.value,numClass);;
+				TreeNode childnode = new TreeNode(hn.attr,hn.value,numClass);
 				if(hn.containedBy(inst)){
-					Iterator<TreeNode> it = root.child.listIterator();
+					Iterator<TreeNode> it = currentnode.child.listIterator();
 					int flag = 0;
 					while(it.hasNext()){
-						tnode = it.next();
-						if(tnode.equal(hn)){
-							tnode.classcount[classLabel]++;
+						childnode = it.next();
+						if(childnode.equal(hn)){
+							childnode.classcount[classLabel]++;
 							flag = 1;
+							break;
 						}
 					}
 					if(flag==0){
+						childnode = new TreeNode(hn.attr,hn.value,numClass);
 						for(int c=0;c<numClass;c++){
-							tnode.classcount[c]=0;
+							childnode.classcount[c]=0;
 						}
-						tnode.classcount[classLabel] = 1;
+						childnode.classcount[classLabel] = 1;
+						hn.addLink(childnode);
+						currentnode.addChild(childnode);
+						childnode.father = currentnode;
 					}
-					root.addChild(tnode);
-					root = tnode;					
+					currentnode = childnode;					
 				}
 			}
 		}
