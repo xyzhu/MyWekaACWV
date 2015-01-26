@@ -1,10 +1,6 @@
 
 package weka.classifiers.mine;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.ListIterator;
-
 import weka.associations.LabeledItemSet;
 import weka.classifiers.Classifier;
 import weka.core.FastVector;
@@ -67,6 +63,11 @@ public class ACWV extends Classifier{
 		String[] arg1 ={"-t","test-nom.arff"};
 		runClassifier(new ACWV(), arg1);
 
+	}
+
+	public FastVector getCCFPhead() {
+		// TODO Auto-generated method stub
+		return fp.headertable();
 	}
 }
 

@@ -48,8 +48,9 @@ public class HeaderTable {
 	private FastVector Transform(FastVector kSets) {
 		FastVector ht = new FastVector();
 		LabeledItemSet ls;
-		HeaderNode hn = null;
+		HeaderNode hn;
 		for(int i=0;i<kSets.size();i++){
+			hn = new HeaderNode();
 			ls = (LabeledItemSet) kSets.elementAt(i);
 			int items[] = ls.items();
 			for(int k=0;k<items.length;k++){

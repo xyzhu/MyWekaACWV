@@ -9,6 +9,11 @@ public class HeaderNode {
 	int count;
 	FastVector link;
 	
+	public HeaderNode(){
+		this.attr = -1;
+		this.value = -1;
+		this.count = 0;
+	}
 	public HeaderNode(int attr, double value, int count){
 		this.attr = attr;
 		this.value = value;
