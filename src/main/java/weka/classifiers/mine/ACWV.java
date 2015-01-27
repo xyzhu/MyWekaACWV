@@ -9,7 +9,7 @@ import weka.core.Instances;
 
 public class ACWV extends Classifier{
 	public double minsup = 0.2;
-	public double minconv = 0.1;
+	public double minconv = 1.1;
 	public int ruleNumLimit = 80000;
 	double[] classValue;
 	int[] classCount;
@@ -58,7 +58,7 @@ public class ACWV extends Classifier{
 
 	public double classifyInstance(Instance instance)
 	{	
-		int vote[] = new int[numClass];
+		double[] vote = new double[numClass];
 		vote = fp.vote(instance);
 		return 0;
 	}

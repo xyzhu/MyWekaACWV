@@ -6,7 +6,7 @@ import weka.core.Instance;
 
 public class HeaderNode {
 	int attr;
-	double value;
+	int value;
 	int count;
 	LinkedList<TreeNode> link;
 	int classcount[];
@@ -20,7 +20,7 @@ public class HeaderNode {
 		//classcount is used to computer Support of a rule
 		classcount = new int[numClass];
 	}
-	public HeaderNode(int attr, double value, int count, int numClass){
+	public HeaderNode(int attr, int value, int count, int numClass){
 		this.attr = attr;
 		this.value = value;
 		this.count = count;

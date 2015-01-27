@@ -1,7 +1,5 @@
 package weka.classifiers.mine;
 
-import java.util.Iterator;
-
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -11,8 +9,9 @@ public class CCFP {
 	FastVector headertable;
 	Tree t;
 	double minsup, minconv, upperBoundMinSupport;
-	int ruleNumLimit;
+	int ruleNumLimit, numRule;
 	int numClass, numInstances;
+	double []classSup;
 
 	public CCFP(Instances insts, Instances onlyclass, double minsup, double minconv, double upperBoundMinSupport,
 			int ruleNumLimit) {
@@ -24,6 +23,20 @@ public class CCFP {
 		this.ruleNumLimit = ruleNumLimit;
 		numClass = onlyclass.numDistinctValues(0);
 		numInstances = insts.numInstances();
+		classSup = calClassSup(onlyclass);
+	}
+	private double[] calClassSup(Instances onlyclass2) {
+		double class_sup[] = new double[numClass];
+		int class_count[] = new int[numClass];
+		int class_label, num_instances = onlyclass2.numInstances();
+		for(int i=0;i<num_instances;i++){
+			class_label = (int) onlyclass2.instance(i).value(0);
+			class_count[class_label]++;
+		}
+		for(int j=0;j<numClass;j++){
+			class_sup[j] = (double)class_count[j]/num_instances;
+		}
+		return class_sup;
 	}
 	public void buildTree() throws Exception{
 		HeaderTable ht = new HeaderTable();
@@ -40,21 +53,28 @@ public class CCFP {
 	public FastVector headertable() {
 		return headertable;
 	}
-	public int[] vote(Instance instance) {
-		int vote[] = new int[numClass];
+	public double[] vote(Instance instance) {
+		double votePro[] = new double[numClass];
 		int numHeaderNode = headertable.size();
 		double sup, conf, conv;
 		HeaderNode hn;
+		CpbList cpbList = new CpbList(numClass, instances.numAttributes());
+		FastVector cpblist;
 		for(int i=numHeaderNode-1; i>=0;i--){
 			hn = (HeaderNode)headertable.elementAt(i);
 			if(hn.containedBy(instance)){
 				for(int j=0;j<numClass;j++){
 					sup = (double)hn.classcount[j]/numInstances;
 					conf = (double)hn.classcount[j]/hn.count;
-					//sup_class = (double)hn.classcount[]
+					conv = (double)(1-classSup[j])/(1-conf);
+					if(sup>minsup&&conf>minconv){
+						votePro[j] += conv*2;
+						numRule++;
+					}
 				}
+				cpblist = cpbList.genCpblist(instance, headertable, i);
 			}
 		}
-		return vote;
+		return votePro;
 	}
 }

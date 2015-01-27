@@ -6,11 +6,11 @@ import java.util.LinkedList;
 public class TreeNode {
 
 	public int attr;
-	public double value;
+	public int value;
 	public TreeNode father;
 	public LinkedList<TreeNode> child;
 	public int classcount[];
-	public TreeNode(int attr, double value, int numClass){
+	public TreeNode(int attr, int value, int numClass){
 		this.attr = attr;
 		this.value = value;
 		child = new LinkedList<TreeNode>();
