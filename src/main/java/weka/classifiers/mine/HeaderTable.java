@@ -1,9 +1,6 @@
 package weka.classifiers.mine;
 
-import java.util.ArrayList;
-
 import weka.associations.ItemSet;
-import weka.associations.LabeledItemSet;
 import weka.core.FastVector;
 import weka.core.Instances;
 
@@ -16,7 +13,7 @@ public class HeaderTable {
 		ht[n].link = null;
 	}
 	
-	public FastVector buildHeaderTable(Instances instances, Instances onlyClass, double minSupport, double upperBoundMinSupport) throws Exception{
+	public FastVector build(Instances instances, int numClass, double minSupport, double upperBoundMinSupport) throws Exception{
 		// minimum support
 		int necSupport, necMaxSupport;
 		FastVector kSets;
@@ -47,16 +44,16 @@ public class HeaderTable {
 	        instances.numInstances());
 	    if (kSets.size() == 0)
 	      return null;
-	    FastVector ht = Transform(kSets);
+	    FastVector ht = Transform(kSets, numClass);
 	    quicksort(ht,0,ht.size()-1);
 	    return ht;
 	}
-	private FastVector Transform(FastVector kSets) {
+	private FastVector Transform(FastVector kSets, int numClass) {
 		FastVector ht = new FastVector();
 		ItemSet ls;
 		HeaderNode hn;
 		for(int i=0;i<kSets.size();i++){
-			hn = new HeaderNode();
+			hn = new HeaderNode(numClass);
 			ls = (ItemSet) kSets.elementAt(i);
 			int items[] = ls.items();
 			for(int k=0;k<items.length;k++){

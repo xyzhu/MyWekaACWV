@@ -9,18 +9,23 @@ public class HeaderNode {
 	double value;
 	int count;
 	LinkedList<TreeNode> link;
+	int classcount[];
 	
-	public HeaderNode(){
+	public HeaderNode(int numClass){
 		this.attr = -1;
 		this.value = -1;
 		this.count = 0;
+		//link to the next node with the same attribute value in the tree
 		link = new LinkedList<TreeNode>();
+		//classcount is used to computer Support of a rule
+		classcount = new int[numClass];
 	}
-	public HeaderNode(int attr, double value, int count){
+	public HeaderNode(int attr, double value, int count, int numClass){
 		this.attr = attr;
 		this.value = value;
 		this.count = count;
 		link = new LinkedList<TreeNode>();
+		classcount = new int[numClass];
 	}
 /*
  * judge if an instance covers the header node

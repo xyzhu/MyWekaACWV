@@ -1,8 +1,6 @@
 
 package weka.classifiers.mine;
 
-import java.util.Iterator;
-
 import weka.associations.LabeledItemSet;
 import weka.classifiers.Classifier;
 import weka.core.FastVector;
@@ -11,9 +9,11 @@ import weka.core.Instances;
 
 public class ACWV extends Classifier{
 	public double minsup = 0.2;
-	public double minconv;
+	public double minconv = 0.1;
+	public int ruleNumLimit = 80000;
 	double[] classValue;
 	int[] classCount;
+	int numClass;
 	Instances m_instances;
 	Instances m_onlyclass;
 	FastVector m_hashtables = new FastVector();
@@ -34,30 +34,32 @@ public class ACWV extends Classifier{
 
 	    // m_onlyClass contains only the class attribute
 	    m_onlyClass = LabeledItemSet.divide(instances, true);
-		attNum=m_instances.numAttributes();
-		clIndex=instances.classIndex();//index of the class
-		//int numClass=m_onlyClass.numDistinctValues(0);//number of classValue
-		int numClass = m_onlyClass.attribute(0).numValues();
+		//attNum=m_instances.numAttributes();
+		//clIndex=instances.classIndex();//index of the class
+		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
+		//int numClass = m_onlyClass.attribute(0).numValues();
 
-		double[] supB = new double[numClass];
+		//double[] supB = new double[numClass];
 		//classCount=new int[numClass];
 		//double[] clValue=m_onlyClass.attributeToDoubleArray(0);
 		//classValue=differentiate(clValue);//find all the different class value
 		//count(clValue);
-		fp = new CCFP();
+		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, upperBoundMinSupport, ruleNumLimit);
 		//long t1 = System.currentTimeMillis();
-		t = fp.buildCCFPTree(m_instances, m_onlyClass, minsup, 1);
+		fp.buildTree();
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);
 //		classValue = getSupB();
 		count = 0;
-		c++;
+		//c++;
 	}
 
 
 	public double classifyInstance(Instance instance)
-	{		
+	{	
+		int vote[] = new int[numClass];
+		vote = fp.vote(instance);
 		return 0;
 	}
 

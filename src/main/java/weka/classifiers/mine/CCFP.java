@@ -7,61 +7,54 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class CCFP {
+	Instances instances, onlyClass;
 	FastVector headertable;
+	Tree t;
+	double minsup, minconv, upperBoundMinSupport;
+	int ruleNumLimit;
+	int numClass, numInstances;
 
-	public Tree buildCCFPTree(Instances instances, Instances onlyClass, double minSupport, double upperBoundMinSupport) throws Exception{
+	public CCFP(Instances insts, Instances onlyclass, double minsup, double minconv, double upperBoundMinSupport,
+			int ruleNumLimit) {
+		this.instances = insts;
+		this.onlyClass = onlyclass;
+		this.minsup = minsup;
+		this.minconv = minconv;
+		this.upperBoundMinSupport = upperBoundMinSupport;
+		this.ruleNumLimit = ruleNumLimit;
+		numClass = onlyclass.numDistinctValues(0);
+		numInstances = insts.numInstances();
+	}
+	public void buildTree() throws Exception{
 		HeaderTable ht = new HeaderTable();
-		headertable = ht.buildHeaderTable(instances, onlyClass, minSupport, upperBoundMinSupport);
-		Tree t = buildCCFPTree(instances, onlyClass, headertable);
-		return t;
-	}
-/*
- * build the CCFP tree with the Instances, Classes and the built header table
- * return the CCFP tree
- * @headertable the built header table
- */
-	private Tree buildCCFPTree(Instances instances, Instances onlyClass, FastVector headertable) {
-		int numInstances = instances.numInstances();
-		int numClass = onlyClass.attribute(0).numValues();
-		int classLabel;
-		Instance inst;
-		Tree t = new Tree(numClass);
-		for(int i=0;i<numInstances;i++){
-			TreeNode currentnode = t.root;
-			inst = instances.instance(i);
-			classLabel = (int)onlyClass.instance(i).value(0);
-			for(int j=0;j<headertable.size();j++){
-				HeaderNode hn = (HeaderNode) headertable.elementAt(j);
-				TreeNode childnode = new TreeNode(hn.attr,hn.value,numClass);
-				if(hn.containedBy(inst)){
-					Iterator<TreeNode> it = currentnode.child.listIterator();
-					int flag = 0;
-					while(it.hasNext()){
-						childnode = it.next();
-						if(childnode.equal(hn)){
-							childnode.classcount[classLabel]++;
-							flag = 1;
-							break;
-						}
-					}
-					if(flag==0){
-						childnode = new TreeNode(hn.attr,hn.value,numClass);
-						for(int c=0;c<numClass;c++){
-							childnode.classcount[c]=0;
-						}
-						childnode.classcount[classLabel] = 1;
-						hn.addLink(childnode);
-						currentnode.addChild(childnode);
-						childnode.father = currentnode;
-					}
-					currentnode = childnode;					
-				}
-			}
+		headertable = ht.build(instances, numClass, minsup, upperBoundMinSupport);
+		Tree t = new Tree(instances, onlyClass, numClass);
+		t.build(headertable);
+		for(int i=0;i<headertable.size();i++){
+			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
+			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
 		}
-				return t;
 	}
+
 
 	public FastVector headertable() {
 		return headertable;
+	}
+	public int[] vote(Instance instance) {
+		int vote[] = new int[numClass];
+		int numHeaderNode = headertable.size();
+		double sup, conf, conv;
+		HeaderNode hn;
+		for(int i=numHeaderNode-1; i>=0;i--){
+			hn = (HeaderNode)headertable.elementAt(i);
+			if(hn.containedBy(instance)){
+				for(int j=0;j<numClass;j++){
+					sup = (double)hn.classcount[j]/numInstances;
+					conf = (double)hn.classcount[j]/hn.count;
+					//sup_class = (double)hn.classcount[]
+				}
+			}
+		}
+		return vote;
 	}
 }
