@@ -26,10 +26,6 @@ public class CCFP {
 		int classLabel;
 		Instance inst;
 		Tree t = new Tree(numClass);
-		for(int l=0;l<headertable.size();l++){
-			HeaderNode hn = (HeaderNode)headertable.elementAt(l);
-			System.out.println(hn.attr+"--"+hn.value+"--"+hn.count);
-		}
 		for(int i=0;i<numInstances;i++){
 			TreeNode currentnode = t.root;
 			inst = instances.instance(i);
