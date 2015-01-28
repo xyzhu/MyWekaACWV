@@ -44,7 +44,7 @@ public class Tree {
 	 * @headertable the built header table
 	 */
 
-	public void build(FastVector headertable) {
+	public void treebuild(FastVector headertable) {
 		int numInstances = instances.numInstances();
 		int classLabel;
 		Instance inst;

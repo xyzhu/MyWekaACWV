@@ -13,7 +13,7 @@ public class HeaderTable {
 		ht[n].link = null;
 	}
 	
-	public FastVector build(Instances instances, int numClass, double minSupport, double upperBoundMinSupport) throws Exception{
+	public FastVector buildTreeHead(Instances instances, int numClass, double minSupport, double upperBoundMinSupport) throws Exception{
 		// minimum support
 		int necSupport, necMaxSupport;
 		FastVector kSets;

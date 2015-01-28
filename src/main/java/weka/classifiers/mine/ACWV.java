@@ -34,25 +34,13 @@ public class ACWV extends Classifier{
 
 	    // m_onlyClass contains only the class attribute
 	    m_onlyClass = LabeledItemSet.divide(instances, true);
-		//attNum=m_instances.numAttributes();
-		//clIndex=instances.classIndex();//index of the class
 		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
-		//int numClass = m_onlyClass.attribute(0).numValues();
-
-		//double[] supB = new double[numClass];
-		//classCount=new int[numClass];
-		//double[] clValue=m_onlyClass.attributeToDoubleArray(0);
-		//classValue=differentiate(clValue);//find all the different class value
-		//count(clValue);
 		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, upperBoundMinSupport, ruleNumLimit);
 		//long t1 = System.currentTimeMillis();
 		fp.buildTree();
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);
-//		classValue = getSupB();
-		count = 0;
-		//c++;
 	}
 
 
@@ -71,7 +59,6 @@ public class ACWV extends Classifier{
 	}
 
 	public FastVector getCCFPhead() {
-		// TODO Auto-generated method stub
 		return fp.headertable();
 	}
 	

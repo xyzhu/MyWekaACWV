@@ -40,9 +40,9 @@ public class CCFP {
 	}
 	public void buildTree() throws Exception{
 		HeaderTable ht = new HeaderTable();
-		headertable = ht.build(instances, numClass, minsup, upperBoundMinSupport);
+		headertable = ht.buildTreeHead(instances, numClass, minsup, upperBoundMinSupport);
 		Tree t = new Tree(instances, onlyClass, numClass);
-		t.build(headertable);
+		t.treebuild(headertable);
 		for(int i=0;i<headertable.size();i++){
 			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
 			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
@@ -59,7 +59,7 @@ public class CCFP {
 		double sup, conf, conv;
 		HeaderNode hn;
 		CpbList cpbList = new CpbList(numClass, instances.numAttributes());
-		FastVector cpblist;
+		FastVector cpblist = new FastVector();
 		for(int i=numHeaderNode-1; i>=0;i--){
 			hn = (HeaderNode)headertable.elementAt(i);
 			if(hn.containedBy(instance)){
@@ -74,6 +74,8 @@ public class CCFP {
 				}
 				cpblist = cpbList.genCpblist(instance, headertable, i);
 			}
+			ConCCFP cfp = new ConCCFP();
+			cfp.buildTree();
 		}
 		return votePro;
 	}
