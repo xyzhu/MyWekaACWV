@@ -8,7 +8,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class ACWV extends Classifier{
-	public double minsup = 0.2;
+	public double minsup = 0.1;
 	public double minconv = 1.1;
 	public int ruleNumLimit = 80000;
 	double[] classValue;
@@ -21,9 +21,11 @@ public class ACWV extends Classifier{
 	int clIndex=0;
 	int attNum=0;
 	CCFP fp;
-	int count = 0;
-	static int c = 0;
 	Tree t;
+	FastVector headertable;
+	private int necSupport, necMaxSupport;		// minimum support
+	int attrvalue[];//store number of values each attribute can be
+	Calculation cal;
 
 	public void buildClassifier (Instances instances)throws Exception
 	{ 
@@ -34,10 +36,15 @@ public class ACWV extends Classifier{
 
 	    // m_onlyClass contains only the class attribute
 	    m_onlyClass = LabeledItemSet.divide(instances, true);
+	    cal = new Calculation();
+		cal.calSupport(minsup, upperBoundMinSupport, instances.numInstances());
+		necSupport = cal.getNecSupport();
+		attrvalue = cal.calAttrValue(instances);
 		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
-		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, upperBoundMinSupport, ruleNumLimit);
+		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit);
 		//long t1 = System.currentTimeMillis();
-		t = fp.buildTree();
+		headertable = fp.buildHeaderTable(numClass, necSupport);
+		t = fp.buildTree(headertable);
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);
@@ -47,7 +54,7 @@ public class ACWV extends Classifier{
 	public double classifyInstance(Instance instance)
 	{	
 		double[] vote = new double[numClass];
-		vote = fp.vote(instance);
+//		vote = fp.vote(instance, headertable, attrvalue);
 		return 0;
 	}
 
@@ -59,7 +66,7 @@ public class ACWV extends Classifier{
 	}
 
 	public FastVector getCCFPhead() {
-		return fp.headertable();
+		return headertable;
 	}
 	
 	public Tree getCCFPTree(){

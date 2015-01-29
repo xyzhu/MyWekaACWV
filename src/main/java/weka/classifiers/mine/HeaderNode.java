@@ -41,5 +41,9 @@ public class HeaderNode {
 	public void addLink(TreeNode tn){
 		link.add(tn);
 	}
-	
+	public boolean containedBy(CpbItemSet cpbItem) {
+		if(cpbItem.itemAt(attr)!=value)
+				return false;
+		return true;
+	}
 }

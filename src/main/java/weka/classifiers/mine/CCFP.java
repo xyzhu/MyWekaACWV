@@ -6,31 +6,25 @@ import weka.core.Instances;
 
 public class CCFP {
 	Instances instances, onlyClass;
-	FastVector headertable;
 	Tree t;
-	double minsup, minconv, upperBoundMinSupport;
+	double minsup, minconv;
 	int ruleNumLimit, numRule;
 	int numAttr, numClass, numInstances;
 	double []classSup;
-	private int necSupport, necMaxSupport;		// minimum support
-	int attrvalue[];//store number of values each attribute can be
-	Calculation cal = new Calculation();
+	int necSupport;
 
-	public CCFP(Instances insts, Instances onlyclass, double minsup, double minconv, double upperBoundMinSupport,
+	public CCFP(Instances insts, Instances onlyclass, double minsup, double minconv, int necSupport,
 			int ruleNumLimit) {
 		this.instances = insts;
 		this.onlyClass = onlyclass;
 		this.minsup = minsup;
 		this.minconv = minconv;
-		this.upperBoundMinSupport = upperBoundMinSupport;
+		this.necSupport = necSupport;
 		this.ruleNumLimit = ruleNumLimit;
 		numAttr = insts.numAttributes();
 		numClass = onlyclass.numDistinctValues(0);
 		numInstances = insts.numInstances();
 		classSup = calClassSup(onlyclass);
-		cal.calSupport(minsup, upperBoundMinSupport, numInstances);
-		necSupport = cal.getNecSupport();
-		attrvalue = cal.calAttrValue(instances);
 	}
 	private double[] calClassSup(Instances onlyclass2) {
 		double class_sup[] = new double[numClass];
@@ -45,11 +39,9 @@ public class CCFP {
 		}
 		return class_sup;
 	}
-	public Tree buildTree() throws Exception{
-		HeaderTable ht = new HeaderTable();
-		headertable = ht.buildTreeHead(instances, numClass, necSupport);
-		Tree t = new Tree(instances, onlyClass, numClass);
-		t.treebuild(headertable);
+	public Tree buildTree(FastVector headertable) throws Exception{
+		Tree t = new Tree(numClass);
+		t.treebuild(instances, onlyClass, headertable);
 		for(int i=0;i<headertable.size();i++){
 			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
 			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
@@ -57,11 +49,7 @@ public class CCFP {
 		return t;
 	}
 
-
-	public FastVector headertable() {
-		return headertable;
-	}
-	public double[] vote(Instance instance) {
+	public double[] vote(Instance instance, FastVector headertable, int []attrvalue) {
 		double votePro[] = new double[numClass];
 		int numHeaderNode = headertable.size();
 		double sup, conf, conv;
@@ -75,16 +63,25 @@ public class CCFP {
 					sup = (double)hn.classcount[j]/numInstances;
 					conf = (double)hn.classcount[j]/hn.count;
 					conv = (double)(1-classSup[j])/(1-conf);
-					if(sup>minsup&&conf>minconv){
-						votePro[j] += conv*2;
+					if(sup>minsup&&conv>minconv){
+						votePro[j] += conv/numAttr;
 						numRule++;
 					}
 				}
 				cpblist = cpbList.genCpblist(instance, headertable, i);
 			}
-			ConCCFP cfp = new ConCCFP(cpblist, cpbList.hashAttribute.hashattr, numClass, minsup, minconv, necSupport, attrvalue);
-			cfp.buildTree();
+			if(cpblist.size()==0)
+				continue;
+			ConCCFP cfp = new ConCCFP(cpblist, numClass);
+			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
+			Tree t = cfp.contreeBuild();
+			//ccfpGrow(hn, t, headertable, instance, numRule, minsup, minconv,ruleNumLim, vote);
 		}
 		return votePro;
+	}
+	public FastVector buildHeaderTable(int numClass, int necSupport) throws Exception {
+		HeaderTable ht = new HeaderTable();
+		FastVector headertable = ht.buildTreeHead(instances, numClass, necSupport);
+		return headertable;
 	}
 }

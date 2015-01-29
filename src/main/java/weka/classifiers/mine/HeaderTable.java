@@ -12,12 +12,6 @@ public class HeaderTable {
 		// find item sets of length one
 		kSets = ItemSet.singletons(instances);
 		ItemSet.upDateCounters(kSets, instances);
-		/*for(int k=0;k<kSets.size();k++){
-	    	LabeledItemSet ls = (LabeledItemSet)kSets.elementAt(k);
-	    	System.out.println("good");
-	    	System.out.println(ls.itemAt(0)+","+ls.itemAt(1)+","+ls.itemAt(2)+","+ls.itemAt(3)+","+ls.counter());
-	    }*/
-
 		// check if a item set of length one is frequent, if not delete it
 		kSets = ItemSet.deleteItemSets(kSets, necSupport,
 				instances.numInstances());
@@ -78,19 +72,26 @@ public class HeaderTable {
 		sets.setElementAt(tmp, r);
 
 	}
-	public static void main(String[] argv){
 
-	}
-
-	public void buildConTreeHead(FastVector cpblist, int[] hashattr, int numClass,
-			double minsup, double minconv, int necSupport, int[]attrvalue) {
-		HeaderNode hn = new HeaderNode(numClass);
+	public FastVector buildConTreeHead(FastVector cpblist, int[] hashattr, int numClass,
+			int necSupport, int[]attrvalue) {
+		FastVector ht = new FastVector();
+		HeaderNode hn;
 		int size = hashattr.length;
 		HashAttribute ha = new HashAttribute(attrvalue);
 		for(int i=0;i<size;i++){
-			
+			int count = hashattr[i];
+			if(count > necSupport){
+				hn = new HeaderNode(numClass);
+				ha.transfromHashCode(i);
+				hn.attr = ha.getAttr();
+				hn.value = ha.getValue();
+				hn.count = count;
+				ht.addElement(hn);
+			}
 		}
-
+		quicksort(ht, 0, ht.size()-1);
+		return ht;
 	}
 
 }

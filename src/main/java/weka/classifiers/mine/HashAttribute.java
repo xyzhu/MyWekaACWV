@@ -4,6 +4,7 @@ package weka.classifiers.mine;
 public class HashAttribute {
 	int numHashCode;//total number of values all the attributes can be
 	int hashattr[];
+	int attr, value;
 	int attrvalue[];
 	public HashAttribute(int []attrvalue){
 		int numAttr = attrvalue.length;
@@ -17,7 +18,7 @@ public class HashAttribute {
 		int hashcode = getHashCode(attr, value);
 		hashattr[hashcode] += count;		
 	}
-	private int getHashCode(int attr, int value) {
+	public int getHashCode(int attr, int value) {
 		int hashcode = 0;
 		if(attr<0){
 			return -1;
@@ -25,9 +26,27 @@ public class HashAttribute {
 		else
 			for(int i=0;i<attr;i++){
 				hashcode += attrvalue[i];
-		}
+			}
 		hashcode += value;
 		return hashcode;
+	}
+
+	public void transfromHashCode(int hashcode) {
+		value = hashcode;
+		int i = 0;
+		for(;i<numHashCode;i++){
+			if(value<attrvalue[i])
+				break;
+			else
+				value -= attrvalue[i];
+		}
+		attr = i;
+	}
+	public int getAttr(){
+		return attr;
+	}
+	public int getValue(){
+		return value;
 	}
 
 }

@@ -21,13 +21,14 @@ public class CpbList {
 
 	public FastVector genCpblist(Instance instance, FastVector headertable,
 			int index) {
-		FastVector cpb = new FastVector(), cpblist = new FastVector();
+		FastVector cpblist = new FastVector();
 		HeaderNode hn = (HeaderNode)headertable.elementAt(index);
 		Iterator<TreeNode> it = hn.link.iterator();
 		TreeNode tn;
 		int count;
-		CpbItemSet cpbItem = new CpbItemSet(0, numClass, numAttr);
+		CpbItemSet cpbItem;
 		while(it.hasNext()){
+			cpbItem = new CpbItemSet(0, numClass, numAttr);
 			tn = it.next();
 			count = tn.count();
 			while(tn.attr!=-1){
@@ -39,11 +40,9 @@ public class CpbList {
 				}
 				cpbItem.setItemAt(tn.value, tn.attr);
 				hashAttribute.increase(tn.attr, tn.value, count);
-				cpb.addElement(cpbItem);
 				tn = tn.father;
 			}
-			cpblist.addElement(cpb);
-			cpb = new FastVector();
+			cpblist.addElement(cpbItem);
 		}
 		return cpblist;
 	}

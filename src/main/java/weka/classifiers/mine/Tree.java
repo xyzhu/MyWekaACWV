@@ -9,13 +9,11 @@ import weka.core.Instances;
 public class Tree {
 
 	TreeNode root;
-	Instances instances, onlyClass;
 	int numClass;
-	public Tree(Instances instances, Instances onlyClass, int numClass){
-		this.instances = instances;
-		this.onlyClass = onlyClass;
+
+	public Tree(int numClass) {
 		this.numClass = numClass;
-		root = new TreeNode(-1,-1,numClass);
+		root = new TreeNode(-1,-1, numClass);
 		root.classcount = new int[numClass];
 		for(int i=0;i<numClass;i++){
 			root.classcount[i] = 0;
@@ -44,7 +42,7 @@ public class Tree {
 	 * @headertable the built header table
 	 */
 
-	public void treebuild(FastVector headertable) {
+	public void treebuild(Instances instances, Instances onlyClass, FastVector headertable) {
 		int numInstances = instances.numInstances();
 		int classLabel;
 		Instance inst;
@@ -84,5 +82,44 @@ public class Tree {
 		}
 
 	}
+	public void contreebuild(FastVector cpblist, FastVector headertable) {
+		int numCpb = cpblist.size();
+		CpbItemSet cpbItem;
+		for(int i=0;i<numCpb;i++){
+			TreeNode currentnode = root;
+			cpbItem = (CpbItemSet)cpblist.elementAt(i);
+			for(int j=0;j<headertable.size();j++){
+				HeaderNode hn = (HeaderNode) headertable.elementAt(j);
+				TreeNode childnode = new TreeNode(hn.attr,hn.value,numClass);
+				if(hn.containedBy(cpbItem)){
+					Iterator<TreeNode> it = currentnode.child.listIterator();
+					int flag = 0;
+					while(it.hasNext()){
+						childnode = it.next();
+						if(childnode.equal(hn)){
+							for(int c=0;c<numClass;c++){
+								childnode.classcount[c]+= cpbItem.class_count[c];;
+								hn.classcount[c]+= cpbItem.class_count[c];
+							}
+							flag = 1;
+							break;
+						}
+					}
+					if(flag==0){
+						childnode = new TreeNode(hn.attr,hn.value,numClass);
+						for(int c=0;c<numClass;c++){
+							childnode.classcount[c]=cpbItem.class_count[c];
+							hn.classcount[c]+= cpbItem.class_count[c];
+						}
+						hn.addLink(childnode);
+						currentnode.addChild(childnode);
+						childnode.father = currentnode;
+					}
+					currentnode = childnode;					
+				}
+			}
 
+		}
+
+	}
 }
