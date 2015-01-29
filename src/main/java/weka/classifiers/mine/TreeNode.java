@@ -26,5 +26,13 @@ public class TreeNode {
 		child.add(tnode);
 		
 	}
+	public int count() {
+		int len = classcount.length;
+		int count = 0;
+		for(int i=0;i<len;i++){
+			count += classcount[i];
+		}
+		return count;
+	}
 
 }

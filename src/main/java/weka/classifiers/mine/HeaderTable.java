@@ -5,48 +5,27 @@ import weka.core.FastVector;
 import weka.core.Instances;
 
 public class HeaderTable {
-	int m_positiveIndex = 2;
-	HeaderNode [] ht = new HeaderNode[5];
-	public void insertHeaderNode(HeaderNode hn, int n){
-		ht[n].attr = hn.attr;
-		ht[n].count = hn.count;
-		ht[n].link = null;
-	}
-	
-	public FastVector buildTreeHead(Instances instances, int numClass, double minSupport, double upperBoundMinSupport) throws Exception{
-		// minimum support
-		int necSupport, necMaxSupport;
-		FastVector kSets;
-	    double nextMinSupport = minSupport * instances.numInstances();
-	    double nextMaxSupport = upperBoundMinSupport * instances.numInstances();
-	    if (Math.rint(nextMinSupport) == nextMinSupport) {
-	      necSupport = (int) nextMinSupport;
-	    } else {
-	      necSupport = Math.round((float) (nextMinSupport + 0.5));
-	    }
-	    if (Math.rint(nextMaxSupport) == nextMaxSupport) {
-	      necMaxSupport = (int) nextMaxSupport;
-	    } else {
-	      necMaxSupport = Math.round((float) (nextMaxSupport + 0.5));
-	    }
 
-	    // find item sets of length one
-	    kSets = ItemSet.singletons(instances);
-	    ItemSet.upDateCounters(kSets, instances);
-	    /*for(int k=0;k<kSets.size();k++){
+	public FastVector buildTreeHead(Instances instances, int numClass, int necSupport) throws Exception{
+		FastVector kSets;
+
+		// find item sets of length one
+		kSets = ItemSet.singletons(instances);
+		ItemSet.upDateCounters(kSets, instances);
+		/*for(int k=0;k<kSets.size();k++){
 	    	LabeledItemSet ls = (LabeledItemSet)kSets.elementAt(k);
 	    	System.out.println("good");
 	    	System.out.println(ls.itemAt(0)+","+ls.itemAt(1)+","+ls.itemAt(2)+","+ls.itemAt(3)+","+ls.counter());
 	    }*/
 
-	    // check if a item set of length one is frequent, if not delete it
-	    kSets = ItemSet.deleteItemSets(kSets, necSupport,
-	        instances.numInstances());
-	    if (kSets.size() == 0)
-	      return null;
-	    FastVector ht = Transform(kSets, numClass);
-	    quicksort(ht,0,ht.size()-1);
-	    return ht;
+		// check if a item set of length one is frequent, if not delete it
+		kSets = ItemSet.deleteItemSets(kSets, necSupport,
+				instances.numInstances());
+		if (kSets.size() == 0)
+			return null;
+		FastVector ht = Transform(kSets, numClass);
+		quicksort(ht,0,ht.size()-1);
+		return ht;
 	}
 	private FastVector Transform(FastVector kSets, int numClass) {
 		FastVector ht = new FastVector();
@@ -97,9 +76,20 @@ public class HeaderTable {
 		HeaderNode tmp = (HeaderNode)sets.elementAt(l);
 		sets.setElementAt(sets.elementAt(r), l);
 		sets.setElementAt(tmp, r);
-		
+
 	}
 	public static void main(String[] argv){
+
+	}
+
+	public void buildConTreeHead(FastVector cpblist, int[] hashattr, int numClass,
+			double minsup, double minconv, int necSupport, int[]attrvalue) {
+		HeaderNode hn = new HeaderNode(numClass);
+		int size = hashattr.length;
+		HashAttribute ha = new HashAttribute(attrvalue);
+		for(int i=0;i<size;i++){
+			
+		}
 
 	}
 

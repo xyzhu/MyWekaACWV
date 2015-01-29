@@ -37,7 +37,7 @@ public class ACWV extends Classifier{
 		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
 		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, upperBoundMinSupport, ruleNumLimit);
 		//long t1 = System.currentTimeMillis();
-		fp.buildTree();
+		t = fp.buildTree();
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);

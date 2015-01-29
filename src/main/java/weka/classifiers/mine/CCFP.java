@@ -10,8 +10,11 @@ public class CCFP {
 	Tree t;
 	double minsup, minconv, upperBoundMinSupport;
 	int ruleNumLimit, numRule;
-	int numClass, numInstances;
+	int numAttr, numClass, numInstances;
 	double []classSup;
+	private int necSupport, necMaxSupport;		// minimum support
+	int attrvalue[];//store number of values each attribute can be
+	Calculation cal = new Calculation();
 
 	public CCFP(Instances insts, Instances onlyclass, double minsup, double minconv, double upperBoundMinSupport,
 			int ruleNumLimit) {
@@ -21,9 +24,13 @@ public class CCFP {
 		this.minconv = minconv;
 		this.upperBoundMinSupport = upperBoundMinSupport;
 		this.ruleNumLimit = ruleNumLimit;
+		numAttr = insts.numAttributes();
 		numClass = onlyclass.numDistinctValues(0);
 		numInstances = insts.numInstances();
 		classSup = calClassSup(onlyclass);
+		cal.calSupport(minsup, upperBoundMinSupport, numInstances);
+		necSupport = cal.getNecSupport();
+		attrvalue = cal.calAttrValue(instances);
 	}
 	private double[] calClassSup(Instances onlyclass2) {
 		double class_sup[] = new double[numClass];
@@ -38,15 +45,16 @@ public class CCFP {
 		}
 		return class_sup;
 	}
-	public void buildTree() throws Exception{
+	public Tree buildTree() throws Exception{
 		HeaderTable ht = new HeaderTable();
-		headertable = ht.buildTreeHead(instances, numClass, minsup, upperBoundMinSupport);
+		headertable = ht.buildTreeHead(instances, numClass, necSupport);
 		Tree t = new Tree(instances, onlyClass, numClass);
 		t.treebuild(headertable);
 		for(int i=0;i<headertable.size();i++){
 			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
 			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
 		}
+		return t;
 	}
 
 
@@ -58,7 +66,7 @@ public class CCFP {
 		int numHeaderNode = headertable.size();
 		double sup, conf, conv;
 		HeaderNode hn;
-		CpbList cpbList = new CpbList(numClass, instances.numAttributes());
+		CpbList cpbList = new CpbList(attrvalue);
 		FastVector cpblist = new FastVector();
 		for(int i=numHeaderNode-1; i>=0;i--){
 			hn = (HeaderNode)headertable.elementAt(i);
@@ -74,7 +82,7 @@ public class CCFP {
 				}
 				cpblist = cpbList.genCpblist(instance, headertable, i);
 			}
-			ConCCFP cfp = new ConCCFP();
+			ConCCFP cfp = new ConCCFP(cpblist, cpbList.hashAttribute.hashattr, numClass, minsup, minconv, necSupport, attrvalue);
 			cfp.buildTree();
 		}
 		return votePro;
