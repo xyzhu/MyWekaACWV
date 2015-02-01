@@ -42,10 +42,10 @@ public class CCFP {
 	public Tree buildTree(FastVector headertable) throws Exception{
 		Tree t = new Tree(numClass);
 		t.treebuild(instances, onlyClass, headertable);
-		for(int i=0;i<headertable.size();i++){
-			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
-			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
-		}
+//		for(int i=0;i<headertable.size();i++){
+//			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
+//			System.out.println(hn.attr+"  "+hn.value+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
+//		}
 		return t;
 	}
 
@@ -54,7 +54,7 @@ public class CCFP {
 		int numHeaderNode = headertable.size();
 		double sup, conf, conv;
 		HeaderNode hn;
-		CpbList cpbList = new CpbList(attrvalue);
+		CpbList cpbList = new CpbList(attrvalue, numClass);
 		FastVector cpblist = new FastVector();
 		for(int i=numHeaderNode-1; i>=0;i--){
 			hn = (HeaderNode)headertable.elementAt(i);
@@ -74,7 +74,7 @@ public class CCFP {
 				continue;
 			ConCCFP cfp = new ConCCFP(cpblist, numClass);
 			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
-			Tree t = cfp.contreeBuild();
+			Tree t = cfp.contreeBuild(conheadertable);
 			//ccfpGrow(hn, t, headertable, instance, numRule, minsup, minconv,ruleNumLim, vote);
 		}
 		return votePro;

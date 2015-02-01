@@ -24,6 +24,9 @@ public class CpbItemSet extends ItemSet {
 		count = 0;
 		class_count = new int[numClass];
 		m_items = new int[numAttr];
+		for(int j=0;j<numAttr;j++){
+			m_items[j] = -1;
+		}
 	}
 
 	public static void upDateCounters(FastVector cpbItemSets) {

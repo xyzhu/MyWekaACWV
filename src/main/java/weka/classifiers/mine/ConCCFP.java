@@ -3,7 +3,6 @@ package weka.classifiers.mine;
 import weka.core.FastVector;
 
 public class ConCCFP {
-	FastVector headertable;
 	FastVector cpblist;
 	Tree t;
 	int numClass;
@@ -14,17 +13,17 @@ public class ConCCFP {
 	}
 	FastVector buildConTreeHead(int[] hashattr, double minsup, double minconv, int necSupport, int []attrvalue){
 		HeaderTable ht = new HeaderTable();
-		headertable = ht.buildConTreeHead(cpblist, hashattr, numClass, necSupport, attrvalue);
+		FastVector headertable = ht.buildConTreeHead(cpblist, hashattr, numClass, necSupport, attrvalue);
 		return headertable;
 	}
 
-	public Tree contreeBuild() {
+	public Tree contreeBuild(FastVector headertable) {
 		t = new Tree(numClass);
 		t.contreebuild(cpblist,headertable);
-		for(int i=0;i<headertable.size();i++){
-			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
-			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
-		}
+//		for(int i=0;i<headertable.size();i++){
+//			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
+//			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
+//		}
 		return t;
 		
 	}

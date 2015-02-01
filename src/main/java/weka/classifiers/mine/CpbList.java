@@ -11,8 +11,9 @@ public class CpbList {
 	public int numClass, numAttr, numHashValue;
 	HashAttribute hashAttribute;
 
-	public CpbList(int[] attrvalue){
+	public CpbList(int[] attrvalue, int numClass){
 		numAttr = attrvalue.length;
+		this.numClass = numClass;
 		for(int i=0;i<numAttr;i++){
 			numHashValue+=attrvalue[i];
 		}
@@ -31,13 +32,12 @@ public class CpbList {
 			cpbItem = new CpbItemSet(0, numClass, numAttr);
 			tn = it.next();
 			count = tn.count();
+			for(int i=0;i<numClass;i++){
+				cpbItem.class_count[i] = tn.classcount[i];
+			}
+			tn = tn.father;
+
 			while(tn.attr!=-1){
-				for(int i=0;i<numClass;i++){
-					cpbItem.class_count[i] = tn.classcount[i];
-				}
-				for(int j=0;j<numAttr;j++){
-					cpbItem.setItemAt(-1, j);;
-				}
 				cpbItem.setItemAt(tn.value, tn.attr);
 				hashAttribute.increase(tn.attr, tn.value, count);
 				tn = tn.father;

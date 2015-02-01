@@ -39,12 +39,14 @@ public class ACWV extends Classifier{
 	    cal = new Calculation();
 		cal.calSupport(minsup, upperBoundMinSupport, instances.numInstances());
 		necSupport = cal.getNecSupport();
-		attrvalue = cal.calAttrValue(instances);
+		attrvalue = cal.calAttrValue(m_instances);
 		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
 		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit);
 		//long t1 = System.currentTimeMillis();
 		headertable = fp.buildHeaderTable(numClass, necSupport);
 		t = fp.buildTree(headertable);
+		int a[];
+//		t.countnode();
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);
@@ -54,7 +56,7 @@ public class ACWV extends Classifier{
 	public double classifyInstance(Instance instance)
 	{	
 		double[] vote = new double[numClass];
-//		vote = fp.vote(instance, headertable, attrvalue);
+		vote = fp.vote(instance, headertable, attrvalue);
 		return 0;
 	}
 
