@@ -11,9 +11,10 @@ public class CCFP {
 	int numAttr, numClass, numInstances;
 	double []classSup;
 	int necSupport;
+	int []attrvalue;
 
 	public CCFP(Instances insts, Instances onlyclass, double minsup, double minconv, int necSupport,
-			int ruleNumLimit) {
+			int ruleNumLimit, int[]attrvalue) {
 		this.instances = insts;
 		this.onlyClass = onlyclass;
 		this.minsup = minsup;
@@ -24,6 +25,7 @@ public class CCFP {
 		numClass = onlyclass.numDistinctValues(0);
 		numInstances = insts.numInstances();
 		classSup = calClassSup(onlyclass);
+		this.attrvalue = attrvalue;
 	}
 	private double[] calClassSup(Instances onlyclass2) {
 		double class_sup[] = new double[numClass];
@@ -48,7 +50,7 @@ public class CCFP {
 		return t;
 	}
 
-	public double[] vote(Instance instance, FastVector headertable, int []attrvalue) {
+	public double[] vote(Instance instance, FastVector headertable) {
 		double votePro[] = new double[numClass];
 		int numHeaderNode = headertable.size();
 		double sup, conf, conv;
@@ -85,6 +87,8 @@ public class CCFP {
 		HeaderNode hn;
 		double sup, conf, conv, w;
 		int len, num=1;
+		CpbList cpbList = new CpbList(attrvalue, numClass);
+		FastVector cpblist = new FastVector();
 		if(t.hasOnePath()==true){
 			for(int i=headertable.size()-1;i>=0;i--){
 				hn = (HeaderNode)headertable.elementAt(i);
@@ -107,6 +111,32 @@ public class CCFP {
 						}
 					}
 				}
+			}
+		}
+		else
+		{
+			for(int i=headertable.size()-1;i>=0;i--){
+				hn = (HeaderNode)headertable.elementAt(i);
+				prefix.addElement(hn);
+				for(int j=0;j<numClass;j++){
+					sup = (double)hn.classcount[j]/numInstances;
+					conf = (double)hn.classcount[j]/hn.count;
+					conv = (double)(1-classSup[j])/(1-conf);
+					if(sup>minsup&&conv>minconv){
+						votePro[j] += conv/numAttr;
+						numRule++;
+					}
+					if(numRule>=ruleNumLimit)
+						return;
+				}
+				cpblist = cpbList.genCpblist(instance, headertable, i);
+				if(cpblist.size()==0)
+					continue;
+				ConCCFP cfp = new ConCCFP(cpblist, numClass);
+				FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
+				Tree tree = cfp.contreeBuild(conheadertable);
+				prefix.addElement(hn);
+				ccfpGrow(prefix, tree, conheadertable, instance, votePro);
 			}
 		}
 	}
