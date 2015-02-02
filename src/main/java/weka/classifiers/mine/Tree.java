@@ -1,6 +1,7 @@
 package weka.classifiers.mine;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -121,5 +122,21 @@ public class Tree {
 
 		}
 
+	}
+	public boolean hasOnePath() {
+		LinkedList<TreeNode> child = root.child;
+		TreeNode tn;
+		while(child!=null){
+			if(child.size()>1){
+				return false;
+			}
+			else if(child.size()!=0){
+				tn = child.getFirst();
+				child = tn.child;				
+			}
+			else
+				break;
+		}
+		return true;
 	}
 }

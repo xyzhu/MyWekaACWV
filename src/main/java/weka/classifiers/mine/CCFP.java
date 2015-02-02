@@ -6,7 +6,6 @@ import weka.core.Instances;
 
 public class CCFP {
 	Instances instances, onlyClass;
-	Tree t;
 	double minsup, minconv;
 	int ruleNumLimit, numRule;
 	int numAttr, numClass, numInstances;
@@ -42,10 +41,10 @@ public class CCFP {
 	public Tree buildTree(FastVector headertable) throws Exception{
 		Tree t = new Tree(numClass);
 		t.treebuild(instances, onlyClass, headertable);
-//		for(int i=0;i<headertable.size();i++){
-//			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
-//			System.out.println(hn.attr+"  "+hn.value+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
-//		}
+		//		for(int i=0;i<headertable.size();i++){
+		//			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
+		//			System.out.println(hn.attr+"  "+hn.value+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
+		//		}
 		return t;
 	}
 
@@ -54,6 +53,7 @@ public class CCFP {
 		int numHeaderNode = headertable.size();
 		double sup, conf, conv;
 		HeaderNode hn;
+		FastVector prefix = new FastVector();
 		CpbList cpbList = new CpbList(attrvalue, numClass);
 		FastVector cpblist = new FastVector();
 		for(int i=numHeaderNode-1; i>=0;i--){
@@ -75,9 +75,40 @@ public class CCFP {
 			ConCCFP cfp = new ConCCFP(cpblist, numClass);
 			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
 			Tree t = cfp.contreeBuild(conheadertable);
-			//ccfpGrow(hn, t, headertable, instance, numRule, minsup, minconv,ruleNumLim, vote);
+			prefix.addElement(hn);
+			ccfpGrow(prefix, t, conheadertable, instance, votePro);
 		}
 		return votePro;
+	}
+	private void ccfpGrow(FastVector prefix, Tree t, FastVector headertable,
+			Instance instance, double[] votePro) {
+		HeaderNode hn;
+		double sup, conf, conv, w;
+		int len, num=1;
+		if(t.hasOnePath()==true){
+			for(int i=headertable.size()-1;i>=0;i--){
+				hn = (HeaderNode)headertable.elementAt(i);
+				for(int j=0;j<numClass;j++){
+					sup = (double)hn.classcount[j]/numInstances;
+					conf = (double)hn.classcount[j]/hn.count;
+					conv = (double)(1-classSup[j])/(1-conf);
+					if(sup>minsup&&conv>minconv){
+						for(int k=0;k<i;k++){
+							len = prefix.size()+k+1;
+							w = conv*len;
+							for(int n=0;n<k;n++){
+								num = num*(i-n)/(k-n);
+							}
+							votePro[j]+=num*w;
+							numRule += num;
+							if(numRule>ruleNumLimit){
+								votePro[j]-=(numRule-ruleNumLimit)*w;
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	public FastVector buildHeaderTable(int numClass, int necSupport) throws Exception {
 		HeaderTable ht = new HeaderTable();
