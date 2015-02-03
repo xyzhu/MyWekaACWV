@@ -53,20 +53,21 @@ public class CCFP {
 	public double[] vote(Instance instance, FastVector headertable) {
 		double votePro[] = new double[numClass];
 		int numHeaderNode = headertable.size();
-		double sup, conf, conv;
+		double sup, conv;
 		HeaderNode hn;
 		FastVector prefix = new FastVector();
 		CpbList cpbList = new CpbList(attrvalue, numClass);
 		FastVector cpblist = new FastVector();
+		int len;
 		for(int i=numHeaderNode-1; i>=0;i--){
 			hn = (HeaderNode)headertable.elementAt(i);
+			len = 1;
 			if(hn.containedBy(instance)){
 				for(int j=0;j<numClass;j++){
-					sup = (double)hn.classcount[j]/numInstances;
-					conf = (double)hn.classcount[j]/hn.count;
-					conv = (double)(1-classSup[j])/(1-conf);
+					sup = compSup(hn, j);
+					conv = compConv(hn, j);
 					if(sup>minsup&&conv>minconv){
-						votePro[j] += conv/numAttr;
+						votePro[j] += conv*len;
 						numRule++;
 					}
 				}
@@ -82,20 +83,27 @@ public class CCFP {
 		}
 		return votePro;
 	}
+	private double compConv(HeaderNode hn, int j) {
+		double conf = (double)hn.classcount[j]/hn.count;
+		return (double)(1-classSup[j])/(1-conf);
+	}
+	private double compSup(HeaderNode hn, int j) {
+		return (double)hn.classcount[j]/numInstances;
+	}
 	private void ccfpGrow(FastVector prefix, Tree t, FastVector headertable,
 			Instance instance, double[] votePro) {
 		HeaderNode hn;
-		double sup, conf, conv, w;
+		double sup, conv, w;
 		int len, num=1;
 		CpbList cpbList = new CpbList(attrvalue, numClass);
 		FastVector cpblist = new FastVector();
+		//if the tree t has only one path
 		if(t.hasOnePath()==true){
 			for(int i=headertable.size()-1;i>=0;i--){
 				hn = (HeaderNode)headertable.elementAt(i);
 				for(int j=0;j<numClass;j++){
-					sup = (double)hn.classcount[j]/numInstances;
-					conf = (double)hn.classcount[j]/hn.count;
-					conv = (double)(1-classSup[j])/(1-conf);
+					sup = compSup(hn, j);
+					conv = compConv(hn,j);
 					if(sup>minsup&&conv>minconv){
 						for(int k=0;k<i;k++){
 							len = prefix.size()+k+1;
@@ -113,17 +121,18 @@ public class CCFP {
 				}
 			}
 		}
+		//else the tree has more than one path
 		else
 		{
 			for(int i=headertable.size()-1;i>=0;i--){
 				hn = (HeaderNode)headertable.elementAt(i);
 				prefix.addElement(hn);
+				len = prefix.size();
 				for(int j=0;j<numClass;j++){
-					sup = (double)hn.classcount[j]/numInstances;
-					conf = (double)hn.classcount[j]/hn.count;
-					conv = (double)(1-classSup[j])/(1-conf);
+					sup = compSup(hn,j);					
+					conv = compConv(hn,j);
 					if(sup>minsup&&conv>minconv){
-						votePro[j] += conv/numAttr;
+						votePro[j] += conv*len;
 						numRule++;
 					}
 					if(numRule>=ruleNumLimit)
