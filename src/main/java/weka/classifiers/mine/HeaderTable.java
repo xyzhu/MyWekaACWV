@@ -91,7 +91,7 @@ public class HeaderTable {
 		HashAttribute ha = new HashAttribute(attrvalue);
 		for(int i=0;i<size;i++){
 			int count = hashattr[i];
-			if(count > necSupport){
+			if(count >= necSupport){
 				hn = new HeaderNode(numClass);
 				ha.transfromHashCode(i);
 				hn.attr = ha.getAttr();

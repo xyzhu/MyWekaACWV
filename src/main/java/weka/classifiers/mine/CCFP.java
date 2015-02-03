@@ -67,20 +67,20 @@ public class CCFP {
 				for(int j=0;j<numClass;j++){
 					sup = compSup(hn, j);
 					conv = compConv(hn, j);
-					if(sup>minsup&&conv>minconv){
+					if(sup>=minsup&&conv>=minconv){
 						votePro[j] += conv*len;
 						numRule++;
 					}
 				}
-				cpblist = cpbList.genCpblist(instance, headertable, i);
+//				cpblist = cpbList.genCpblist(instance, headertable, i);
 			}
 			if(cpblist.size()==0)
 				continue;
-			ConCCFP cfp = new ConCCFP(cpblist, numClass);
-			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
-			Tree t = cfp.contreeBuild(conheadertable);
-			prefix.addElement(hn);
-			ccfpGrow(prefix, t, conheadertable, instance, votePro);
+//			ConCCFP cfp = new ConCCFP(cpblist, numClass);
+//			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
+//			Tree t = cfp.contreeBuild(conheadertable);
+//			prefix.addElement(hn);
+//			ccfpGrow(prefix, t, conheadertable, instance, votePro);
 		}
 		return votePro;
 	}
@@ -109,7 +109,7 @@ public class CCFP {
 				for(int j=0;j<numClass;j++){
 					sup = compSup(hn, j);
 					conv = compConv(hn,j);
-					if(sup>minsup&&conv>minconv){
+					if(sup>=minsup&&conv>=minconv){
 						for(int k=0;k<i;k++){
 							len = prefix.size()+k+1;
 							w = conv*len;// weight of the rule
@@ -136,7 +136,7 @@ public class CCFP {
 				for(int j=0;j<numClass;j++){
 					sup = compSup(hn,j);					
 					conv = compConv(hn,j);
-					if(sup>minsup&&conv>minconv){
+					if(sup>=minsup&&conv>=minconv){
 						votePro[j] += conv*len;
 						numRule++;
 					}

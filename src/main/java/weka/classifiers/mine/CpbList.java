@@ -30,8 +30,10 @@ public class CpbList {
 		TreeNode tn;
 		int count;
 		CpbItemSet cpbItem;
+		int flag;
 		while(it.hasNext()){
 			cpbItem = new CpbItemSet(0, numClass, numAttr);
+			flag = 0;
 			tn = it.next();
 			count = tn.count();
 			for(int i=0;i<numClass;i++){
@@ -39,11 +41,14 @@ public class CpbList {
 			}
 			tn = tn.father;
 			while(tn.attr!=-1){//tn is not the root of the tree
+				flag = 1;
 				cpbItem.setItemAt(tn.value, tn.attr);
 				hashAttribute.increase(tn.attr, tn.value, count);//hashAttribute hold the count
 				tn = tn.father;
 			}
-			cpblist.addElement(cpbItem);
+			if(flag!=1){
+				cpblist.addElement(cpbItem);
+			}
 		}
 		return cpblist;
 	}

@@ -1,17 +1,15 @@
 package weka.classifiers.mine;
 
-import java.util.Enumeration;
-
 import weka.associations.ItemSet;
 import weka.core.FastVector;
-import weka.core.Instances;
 
 public class CpbItemSet extends ItemSet {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 9153297436049397741L;
+	private static final long serialVersionUID = -7210872793774584202L;
+	//private static final long serialVersionUID = 9153297436049397741L;
 	public int count;
 	public int class_count[];
 	public static int numAttr;
