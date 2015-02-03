@@ -22,7 +22,7 @@ public class Tree {
 	}
 	public int countnode() {
 		int nodecount[] = new int[1];
-		printtree(root, nodecount);
+		//printtree(root, nodecount);
 		return nodecount[0];
 	}
 	private void printtree(TreeNode tn, int nodecount[]) {
@@ -32,7 +32,7 @@ public class Tree {
 		while(it.hasNext()){
 			TreeNode t = it.next();
 			nodecount[0]++;
-			System.out.println(t.father.attr+"  "+t.father.value+"*******"+t.attr+"   " +t.value+"    "+t.classcount[0]+","+t.classcount[1]);
+			//System.out.println(t.father.attr+"  "+t.father.value+"*******"+t.attr+"   " +t.value+"    "+t.classcount[0]+","+t.classcount[1]);
 			printtree(t, nodecount);
 		}
 
@@ -59,6 +59,7 @@ public class Tree {
 					int flag = 0;
 					while(it.hasNext()){
 						childnode = it.next();
+						//if currentnode has a child hold the same item with hn, increase its class count
 						if(childnode.equal(hn)){
 							childnode.classcount[classLabel]++;
 							hn.classcount[classLabel]++;
@@ -66,6 +67,7 @@ public class Tree {
 							break;
 						}
 					}
+					//if currentnode does not have a child hold the same item with hn, create a new child
 					if(flag==0){
 						childnode = new TreeNode(hn.attr,hn.value,numClass);
 						for(int c=0;c<numClass;c++){
@@ -89,14 +91,16 @@ public class Tree {
 		for(int i=0;i<numCpb;i++){
 			TreeNode currentnode = root;
 			cpbItem = (CpbItemSet)cpblist.elementAt(i);
+			//for all the header node from last to first
 			for(int j=0;j<headertable.size();j++){
 				HeaderNode hn = (HeaderNode) headertable.elementAt(j);
 				TreeNode childnode = new TreeNode(hn.attr,hn.value,numClass);
 				if(hn.containedBy(cpbItem)){
-					Iterator<TreeNode> it = currentnode.child.listIterator();
+					Iterator<TreeNode> it = currentnode.child.listIterator();//it traverse all the child of currentnode
 					int flag = 0;
-					while(it.hasNext()){
+					while(it.hasNext()){//while currentnode has childs
 						childnode = it.next();
+						//if currentnode has a child hold the same item with hn, increase its class count
 						if(childnode.equal(hn)){
 							for(int c=0;c<numClass;c++){
 								childnode.classcount[c]+= cpbItem.class_count[c];;
@@ -106,6 +110,7 @@ public class Tree {
 							break;
 						}
 					}
+					//if currentnode does not have a child hold the same item with hn, create a new child
 					if(flag==0){
 						childnode = new TreeNode(hn.attr,hn.value,numClass);
 						for(int c=0;c<numClass;c++){

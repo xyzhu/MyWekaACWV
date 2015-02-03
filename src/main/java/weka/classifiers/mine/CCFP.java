@@ -99,15 +99,17 @@ public class CCFP {
 		FastVector cpblist = new FastVector();
 		//if the tree t has only one path
 		if(t.hasOnePath()==true){
+			//from the last header node to the first
 			for(int i=headertable.size()-1;i>=0;i--){
 				hn = (HeaderNode)headertable.elementAt(i);
+				//for each class label cl, j is the index of cl
 				for(int j=0;j<numClass;j++){
 					sup = compSup(hn, j);
 					conv = compConv(hn,j);
 					if(sup>minsup&&conv>minconv){
 						for(int k=0;k<i;k++){
 							len = prefix.size()+k+1;
-							w = conv*len;
+							w = conv*len;// weight of the rule
 							for(int n=0;n<k;n++){
 								num = num*(i-n)/(k-n);
 							}
@@ -144,7 +146,6 @@ public class CCFP {
 				ConCCFP cfp = new ConCCFP(cpblist, numClass);
 				FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
 				Tree tree = cfp.contreeBuild(conheadertable);
-				prefix.addElement(hn);
 				ccfpGrow(prefix, tree, conheadertable, instance, votePro);
 			}
 		}

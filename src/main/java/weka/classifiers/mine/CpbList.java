@@ -20,11 +20,12 @@ public class CpbList {
 		hashAttribute = new HashAttribute(attrvalue);
 	}
 
+	//generate the conditional pattern base list
 	public FastVector genCpblist(Instance instance, FastVector headertable,
 			int index) {
 		FastVector cpblist = new FastVector();
 		HeaderNode hn = (HeaderNode)headertable.elementAt(index);
-		Iterator<TreeNode> it = hn.link.iterator();
+		Iterator<TreeNode> it = hn.link.iterator();//all the tree node linked to hn
 		TreeNode tn;
 		int count;
 		CpbItemSet cpbItem;
@@ -37,9 +38,9 @@ public class CpbList {
 			}
 			tn = tn.father;
 
-			while(tn.attr!=-1){
+			while(tn.attr!=-1){//tn is not the root of the tree
 				cpbItem.setItemAt(tn.value, tn.attr);
-				hashAttribute.increase(tn.attr, tn.value, count);
+				hashAttribute.increase(tn.attr, tn.value, count);//hashAttribute hold the count
 				tn = tn.father;
 			}
 			cpblist.addElement(cpbItem);
