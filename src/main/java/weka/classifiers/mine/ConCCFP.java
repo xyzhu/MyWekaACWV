@@ -13,7 +13,7 @@ public class ConCCFP {
 	}
 	FastVector buildConTreeHead(int[] hashattr, double minsup, double minconv, int necSupport, int []attrvalue){
 		HeaderTable ht = new HeaderTable();
-		FastVector headertable = ht.buildConTreeHead(cpblist, hashattr, numClass, necSupport, attrvalue);
+		FastVector headertable = ht.buildConTreeHead(hashattr, numClass, necSupport, attrvalue);
 		return headertable;
 	}
 

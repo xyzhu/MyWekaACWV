@@ -4,12 +4,12 @@ import java.util.Iterator;
 
 import weka.core.FastVector;
 import weka.core.Instance;
-import weka.core.Instances;
 
 public class CpbList {
 
 	public int numClass, numAttr, numHashValue;
 	HashAttribute hashAttribute;
+	int [] attrvalue;
 
 	public CpbList(int[] attrvalue, int numClass){
 		numAttr = attrvalue.length;
@@ -17,12 +17,13 @@ public class CpbList {
 		for(int i=0;i<numAttr;i++){
 			numHashValue+=attrvalue[i];
 		}
-		hashAttribute = new HashAttribute(attrvalue);
+		this.attrvalue = attrvalue;
 	}
 
 	//generate the conditional pattern base list
 	public FastVector genCpblist(Instance instance, FastVector headertable,
 			int index) {
+		hashAttribute = new HashAttribute(attrvalue);
 		FastVector cpblist = new FastVector();
 		HeaderNode hn = (HeaderNode)headertable.elementAt(index);
 		Iterator<TreeNode> it = hn.link.iterator();//all the tree node linked to hn
@@ -37,7 +38,6 @@ public class CpbList {
 				cpbItem.class_count[i] = tn.classcount[i];
 			}
 			tn = tn.father;
-
 			while(tn.attr!=-1){//tn is not the root of the tree
 				cpbItem.setItemAt(tn.value, tn.attr);
 				hashAttribute.increase(tn.attr, tn.value, count);//hashAttribute hold the count

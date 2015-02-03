@@ -1,5 +1,7 @@
 package weka.classifiers.mine;
 
+import java.util.Enumeration;
+
 import weka.associations.ItemSet;
 import weka.core.FastVector;
 import weka.core.Instances;
@@ -11,7 +13,7 @@ public class HeaderTable {
 
 		// find item sets of length one
 		kSets = ItemSet.singletons(instances);
-		ItemSet.upDateCounters(kSets, instances);
+		upDateCounters(kSets, instances);
 		// check if a item set of length one is frequent, if not delete it
 		kSets = ItemSet.deleteItemSets(kSets, necSupport,
 				instances.numInstances());
@@ -20,6 +22,14 @@ public class HeaderTable {
 		FastVector ht = Transform(kSets, numClass);
 		quicksort(ht,0,ht.size()-1);
 		return ht;
+	}
+	private void upDateCounters(FastVector itemSets, Instances instances) {
+		for (int i = 0; i < instances.numInstances(); i++) {
+			Enumeration enu = itemSets.elements();
+			while (enu.hasMoreElements()) 
+				((ItemSet)enu.nextElement()).upDateCounter(instances.instance(i));
+		}
+
 	}
 	private FastVector Transform(FastVector kSets, int numClass) {
 		FastVector ht = new FastVector();
@@ -73,7 +83,7 @@ public class HeaderTable {
 
 	}
 
-	public FastVector buildConTreeHead(FastVector cpblist, int[] hashattr, int numClass,
+	public FastVector buildConTreeHead(int[] hashattr, int numClass,
 			int necSupport, int[]attrvalue) {
 		FastVector ht = new FastVector();
 		HeaderNode hn;

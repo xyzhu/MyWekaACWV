@@ -14,7 +14,7 @@ public class ACWVTest{
 	ACWV acwv;
 	@Before
 	public void setUp() throws Exception {
-		acwv = new ACWV();
+		acwv = new ACWV(0.2, 1.1);
 		Evaluation.evaluateModel(acwv, arg1);
 	}
 

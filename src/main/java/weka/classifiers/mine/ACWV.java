@@ -8,8 +8,8 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class ACWV extends Classifier{
-	public double minsup = 0.1;
-	public double minconv = 1.1;
+	public double minsup;
+	public double minconv;
 	public int ruleNumLimit = 80000;
 	double[] classValue;
 	int[] classCount;
@@ -26,6 +26,11 @@ public class ACWV extends Classifier{
 	private int necSupport, necMaxSupport;		// minimum support
 	int attrvalue[];//store number of values each attribute can be
 	Calculation cal;
+	
+	public ACWV(double minSup, double minConv){
+		minsup = minSup;
+		minconv = minConv;
+	}
 
 	public void buildClassifier (Instances instances)throws Exception
 	{ 
@@ -80,7 +85,7 @@ public class ACWV extends Classifier{
 
 	public static void main(String[] argv){
 		String[] arg1 ={"-t","test-nom.arff"};
-		runClassifier(new ACWV(), arg1);
+		runClassifier(new ACWV(0.2,1.1), arg1);
 
 	}
 

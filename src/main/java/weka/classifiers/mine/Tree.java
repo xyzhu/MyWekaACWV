@@ -22,7 +22,7 @@ public class Tree {
 	}
 	public int countnode() {
 		int nodecount[] = new int[1];
-		//printtree(root, nodecount);
+		printtree(root, nodecount);
 		return nodecount[0];
 	}
 	private void printtree(TreeNode tn, int nodecount[]) {

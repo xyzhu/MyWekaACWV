@@ -57,11 +57,12 @@ public class CCFP {
 		HeaderNode hn;
 		FastVector prefix = new FastVector();
 		CpbList cpbList = new CpbList(attrvalue, numClass);
-		FastVector cpblist = new FastVector();
+		FastVector cpblist;
 		int len;
 		for(int i=numHeaderNode-1; i>=0;i--){
 			hn = (HeaderNode)headertable.elementAt(i);
 			len = 1;
+			cpblist = new FastVector();
 			if(hn.containedBy(instance)){
 				for(int j=0;j<numClass;j++){
 					sup = compSup(hn, j);
@@ -85,6 +86,8 @@ public class CCFP {
 	}
 	private double compConv(HeaderNode hn, int j) {
 		double conf = (double)hn.classcount[j]/hn.count;
+		if(conf==1)
+			conf = 0.999;
 		return (double)(1-classSup[j])/(1-conf);
 	}
 	private double compSup(HeaderNode hn, int j) {
