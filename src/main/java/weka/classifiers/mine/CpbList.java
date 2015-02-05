@@ -46,7 +46,7 @@ public class CpbList {
 				hashAttribute.increase(tn.attr, tn.value, count);//hashAttribute hold the count
 				tn = tn.father;
 			}
-			if(flag!=1){
+			if(flag!=0){
 				cpblist.addElement(cpbItem);
 			}
 		}

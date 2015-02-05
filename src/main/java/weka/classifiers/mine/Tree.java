@@ -1,5 +1,6 @@
 package weka.classifiers.mine;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -7,8 +8,12 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class Tree {
+public class Tree implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 256354584445345069L;
 	TreeNode root;
 	int numClass;
 

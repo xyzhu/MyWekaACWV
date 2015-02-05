@@ -1,10 +1,16 @@
 package weka.classifiers.mine;
 
+import java.io.Serializable;
+
 import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class CCFP {
+public class CCFP implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8035375214153683682L;
 	Instances instances, onlyClass;
 	double minsup, minconv;
 	int ruleNumLimit, numRule;
@@ -21,6 +27,7 @@ public class CCFP {
 		this.minconv = minconv;
 		this.necSupport = necSupport;
 		this.ruleNumLimit = ruleNumLimit;
+		numRule = 0;
 		numAttr = insts.numAttributes();
 		numClass = onlyclass.numDistinctValues(0);
 		numInstances = insts.numInstances();
@@ -63,6 +70,7 @@ public class CCFP {
 			hn = (HeaderNode)headertable.elementAt(i);
 			len = 1;
 			cpblist = new FastVector();
+			prefix = new FastVector();
 			if(hn.containedBy(instance)){
 				for(int j=0;j<numClass;j++){
 					sup = compSup(hn, j);
@@ -72,15 +80,15 @@ public class CCFP {
 						numRule++;
 					}
 				}
-//				cpblist = cpbList.genCpblist(instance, headertable, i);
+				cpblist = cpbList.genCpblist(instance, headertable, i);
 			}
 			if(cpblist.size()==0)
 				continue;
-//			ConCCFP cfp = new ConCCFP(cpblist, numClass);
-//			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
-//			Tree t = cfp.contreeBuild(conheadertable);
-//			prefix.addElement(hn);
-//			ccfpGrow(prefix, t, conheadertable, instance, votePro);
+			ConCCFP cfp = new ConCCFP(cpblist, numClass);
+			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, minsup, minconv, necSupport, attrvalue);
+			Tree t = cfp.contreeBuild(conheadertable);
+			prefix.addElement(hn);
+			ccfpGrow(prefix, t, conheadertable, instance, votePro);
 		}
 		return votePro;
 	}

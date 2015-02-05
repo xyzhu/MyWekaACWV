@@ -8,7 +8,7 @@ import weka.core.Instance;
 import weka.core.Instances;
 
 public class ACWV extends Classifier{
-	public double minsup = 0.2;
+	public double minsup = 0.01;
 	public double minconv = 1.1;
 	public int ruleNumLimit = 80000;
 	double[] classValue;
@@ -19,7 +19,7 @@ public class ACWV extends Classifier{
 	FastVector m_hashtables = new FastVector();
 	public Instances m_onlyClass;
 	int clIndex=0;
-	int attNum=0;
+	int numAttr=0;
 	CCFP fp;
 	Tree t;
 	FastVector headertable;
@@ -40,6 +40,7 @@ public class ACWV extends Classifier{
 		necSupport = cal.getNecSupport();
 		attrvalue = cal.calAttrValue(m_instances);
 		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
+		numAttr = m_instances.numAttributes();
 		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit, attrvalue);
 		//long t1 = System.currentTimeMillis();
 		headertable = fp.buildHeaderTable(numClass, necSupport);
@@ -56,6 +57,10 @@ public class ACWV extends Classifier{
 		double[] vote = new double[numClass];
 		vote = fp.vote(instance, headertable);
 		int max = findMax(vote);
+//		for(int i=0;i<numAttr; i++){
+//			System.out.println(instance.value(i));
+//		}
+//		System.out.println(max);
 		return max;
 	}
 
@@ -77,7 +82,7 @@ public class ACWV extends Classifier{
 
 
 	public static void main(String[] argv){
-		String[] arg1 ={"-t","test-nom.arff"};
+		String[] arg1 ={"-t","dataset/annealout.arff"};
 		runClassifier(new ACWV(), arg1);
 
 	}

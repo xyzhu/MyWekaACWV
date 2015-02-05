@@ -1,10 +1,15 @@
 package weka.classifiers.mine;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 
-public class TreeNode {
+public class TreeNode implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1776671077375905607L;
 	public int attr;
 	public int value;
 	public TreeNode father;

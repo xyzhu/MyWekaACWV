@@ -1,10 +1,15 @@
 package weka.classifiers.mine;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import weka.core.Instance;
 
-public class HeaderNode {
+public class HeaderNode implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6192241785188784718L;
 	int attr;
 	int value;
 	int count;
