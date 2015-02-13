@@ -4,6 +4,7 @@ import java.util.Enumeration;
 
 import weka.associations.ItemSet;
 import weka.core.FastVector;
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class HeaderTable {
@@ -83,7 +84,7 @@ public class HeaderTable {
 
 	}
 
-	public FastVector buildConTreeHead(int[] hashattr, int numClass,
+	public FastVector buildConTreeHead(int[] hashattr, Instance instance, int numClass,
 			int necSupport, int[]attrvalue) {
 		FastVector ht = new FastVector();
 		HeaderNode hn;
@@ -91,13 +92,15 @@ public class HeaderTable {
 		HashAttribute ha = new HashAttribute(attrvalue);
 		for(int i=0;i<size;i++){
 			int count = hashattr[i];
-			if(count >= necSupport){
+			if(count > necSupport){
 				hn = new HeaderNode(numClass);
 				ha.transfromHashCode(i);
 				hn.attr = ha.getAttr();
 				hn.value = ha.getValue();
 				hn.count = count;
-				ht.addElement(hn);
+				if(hn.containedBy(instance)){
+					ht.addElement(hn);
+				}
 			}
 		}
 		quicksort(ht, 0, ht.size()-1);

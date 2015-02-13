@@ -14,6 +14,7 @@ public class ACWV extends Classifier{
 	double[] classValue;
 	int[] classCount;
 	int numClass;
+	static int buildCount = 0;
 	Instances m_instances;
 	Instances m_onlyclass;
 	FastVector m_hashtables = new FastVector();
@@ -30,6 +31,7 @@ public class ACWV extends Classifier{
 	{ 
 
 		double upperBoundMinSupport=1;
+		buildCount++;
 		// m_instances does not contain the class attribute
 		m_instances = LabeledItemSet.divide(instances, false);
 
@@ -41,11 +43,14 @@ public class ACWV extends Classifier{
 		attrvalue = cal.calAttrValue(m_instances);
 		numClass=m_onlyClass.numDistinctValues(0);//number of classValue
 		numAttr = m_instances.numAttributes();
-		fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit, attrvalue);
-		//long t1 = System.currentTimeMillis();
-		headertable = fp.buildHeaderTable(numClass, necSupport);
-		t = fp.buildTree(headertable);
-		//		t.countnode();
+		if(buildCount>1){		
+			fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit, attrvalue);
+			//long t1 = System.currentTimeMillis();
+			headertable = fp.buildHeaderTable(numClass, necSupport);
+			t = fp.buildTree(headertable);
+			t.countnode();
+		}
+		
 		//long t2 = System.currentTimeMillis();
 		//long timecost = (t2 - t1);
 		//System.out.println("the time cost of building classfier is :" + timecost);
@@ -54,13 +59,18 @@ public class ACWV extends Classifier{
 
 	public double classifyInstance(Instance instance)
 	{	
-		double[] vote = new double[numClass];
-		vote = fp.vote(instance, headertable);
-		int max = findMax(vote);
-//		for(int i=0;i<numAttr; i++){
-//			System.out.println(instance.value(i));
-//		}
-//		System.out.println(max);
+		int max = 0;
+		if(buildCount>1){
+			double[] vote = new double[numClass];
+			vote = fp.vote(instance, headertable);
+			System.out.println(vote[0]+"   "+vote[1]);
+			System.out.println("****************");
+			max = findMax(vote);
+		}
+		//		for(int i=0;i<numAttr; i++){
+		//			System.out.println(instance.value(i));
+		//		}
+		//		System.out.println(max);
 		return max;
 	}
 
@@ -82,7 +92,7 @@ public class ACWV extends Classifier{
 
 
 	public static void main(String[] argv){
-		String[] arg1 ={"-t","dataset/annealout.arff"};
+		String[] arg1 ={"-t","test-nom.arff"};
 		runClassifier(new ACWV(), arg1);
 
 	}

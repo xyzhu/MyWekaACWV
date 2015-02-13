@@ -37,7 +37,7 @@ public class Tree implements Serializable{
 		while(it.hasNext()){
 			TreeNode t = it.next();
 			nodecount[0]++;
-			//System.out.println(t.father.attr+"  "+t.father.value+"*******"+t.attr+"   " +t.value+"    "+t.classcount[0]+","+t.classcount[1]);
+		//	System.out.println(t.father.attr+"  "+t.father.value+"*******"+t.attr+"   " +t.value+"    "+t.classcount[0]+","+t.classcount[1]);
 			printtree(t, nodecount);
 		}
 

@@ -1,6 +1,7 @@
 package weka.classifiers.mine;
 
 import weka.core.FastVector;
+import weka.core.Instance;
 
 public class ConCCFP {
 	FastVector cpblist;
@@ -11,9 +12,9 @@ public class ConCCFP {
 		this.cpblist = cpblist;
 		this.numClass = numClass;
 	}
-	FastVector buildConTreeHead(int[] hashattr, double minsup, double minconv, int necSupport, int []attrvalue){
+	FastVector buildConTreeHead(int[] hashattr, Instance instance, double minsup, double minconv, int necSupport, int []attrvalue){
 		HeaderTable ht = new HeaderTable();
-		FastVector headertable = ht.buildConTreeHead(hashattr, numClass, necSupport, attrvalue);
+		FastVector headertable = ht.buildConTreeHead(hashattr, instance, numClass, necSupport, attrvalue);
 		return headertable;
 	}
 
