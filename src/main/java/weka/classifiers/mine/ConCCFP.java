@@ -21,10 +21,6 @@ public class ConCCFP {
 	public Tree contreeBuild(FastVector headertable) {
 		t = new Tree(numClass);
 		t.contreebuild(cpblist,headertable);
-//		for(int i=0;i<headertable.size();i++){
-//			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
-//			System.out.println(hn.attr+"  "+hn.value+"  "+hn.count+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
-//		}
 		return t;
 		
 	}

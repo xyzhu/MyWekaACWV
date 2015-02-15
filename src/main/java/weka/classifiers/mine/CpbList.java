@@ -50,14 +50,6 @@ public class CpbList {
 				cpblist.addElement(cpbItem);
 			}
 		}
-
-//		for(int x=0;x<cpblist.size();x++){
-//			CpbItemSet ci  = (CpbItemSet)cpblist.elementAt(x);
-//			for(int y=0;y<ci.items().length;y++){
-//				System.out.print(ci.itemAt(y)+", ");
-//			}
-//			System.out.println();
-//		}
 		return cpblist;
 	}
 

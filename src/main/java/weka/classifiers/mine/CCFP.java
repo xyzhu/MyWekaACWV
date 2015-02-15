@@ -53,10 +53,6 @@ public class CCFP implements Serializable{
 	public Tree buildTree(FastVector headertable) throws Exception{
 		Tree t = new Tree(numClass);
 		t.treebuild(instances, onlyClass, headertable);
-		//		for(int i=0;i<headertable.size();i++){
-		//			HeaderNode hn = (HeaderNode)headertable.elementAt(i);
-		//			System.out.println(hn.attr+"  "+hn.value+"  "+hn.classcount[0]+"  "+hn.classcount[1]);
-		//		}
 		return t;
 	}
 
@@ -101,22 +97,12 @@ public class CCFP implements Serializable{
 			Tree t = cfp.contreeBuild(conheadertable);
 			prefix.addElement(hn);
 			if(t.root.child.size()>0){
-//				for(int x=0;x<conheadertable.size();x++){
-//					HeaderNode hnode = (HeaderNode)conheadertable.elementAt(x);
-//					System.out.print(hnode.attr+":"+hnode.value);
-//					for(int y=0;y<hnode.classcount.length;y++){
-//						System.out.print("---"+hnode.classcount[y]+"***");
-//					}
-//					System.out.println();
-//				}
 				ccfpGrow(prefix, t, conheadertable, instance, votePro);
 				if(terminal==true){
-					System.out.println("middle: "+numRule);
 					return votePro;
 				}
 			}
 		}
-		System.out.println("final: "+numRule);
 		return votePro;
 	}
 

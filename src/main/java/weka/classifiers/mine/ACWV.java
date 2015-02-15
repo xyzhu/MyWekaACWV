@@ -45,15 +45,10 @@ public class ACWV extends Classifier{
 		numAttr = m_instances.numAttributes();
 		if(buildCount>1){		
 			fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit, attrvalue);
-			//long t1 = System.currentTimeMillis();
 			headertable = fp.buildHeaderTable(numClass, necSupport);
 			t = fp.buildTree(headertable);
 			t.countnode();
 		}
-
-		//long t2 = System.currentTimeMillis();
-		//long timecost = (t2 - t1);
-		//System.out.println("the time cost of building classfier is :" + timecost);
 	}
 
 
@@ -63,14 +58,8 @@ public class ACWV extends Classifier{
 		if(buildCount>1){
 			double[] vote = new double[numClass];
 			vote = fp.vote(instance, headertable);
-			//			System.out.println(vote[0]+"   "+vote[1]);
-			//			System.out.println("****************");
 			max = findMax(vote);
 		}
-		//		for(int i=0;i<numAttr; i++){
-		//			System.out.println(instance.value(i));
-		//		}
-		//		System.out.println(max);
 		return max;
 	}
 
@@ -130,15 +119,15 @@ public class ACWV extends Classifier{
 		
 //		String[] arg12={"-t","cmcout.arff"};
 //		runClassifier(new ACWV(), arg12);
-//		
+		
 //		String[] arg13={"-t","ecoliout.arff"};
 //		runClassifier(new ACWV(), arg13);
 //		
 //		String[] arg14={"-t","liverout.arff"};
 //		runClassifier(new ACWV(), arg14);
 //		
-		String[] arg15={"-t","postout.arff"};
-		runClassifier(new ACWV(), arg15);
+//		String[] arg15={"-t","postout.arff"};
+//		runClassifier(new ACWV(), arg15);
 //		
 //		String[] arg16={"-t","hypoout2.arff"};
 //		runClassifier(new ACWV(), arg16);
