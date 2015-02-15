@@ -28,6 +28,7 @@ public class Tree implements Serializable{
 	public int countnode() {
 		int nodecount[] = new int[1];
 		printtree(root, nodecount);
+		System.out.println(nodecount[0]);
 		return nodecount[0];
 	}
 	private void printtree(TreeNode tn, int nodecount[]) {

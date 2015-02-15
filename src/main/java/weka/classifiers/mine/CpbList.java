@@ -27,6 +27,7 @@ public class CpbList {
 		FastVector cpblist = new FastVector();
 		HeaderNode hn = (HeaderNode)headertable.elementAt(index);
 		Iterator<TreeNode> it = hn.link.iterator();//all the tree node linked to hn
+		System.out.println(hn.link.size());
 		TreeNode tn;
 		int count;
 		CpbItemSet cpbItem;
@@ -50,6 +51,14 @@ public class CpbList {
 				cpblist.addElement(cpbItem);
 			}
 		}
+
+//		for(int x=0;x<cpblist.size();x++){
+//			CpbItemSet ci  = (CpbItemSet)cpblist.elementAt(x);
+//			for(int y=0;y<ci.items().length;y++){
+//				System.out.print(ci.itemAt(y)+", ");
+//			}
+//			System.out.println();
+//		}
 		return cpblist;
 	}
 
