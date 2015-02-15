@@ -112,8 +112,8 @@ public class CCFP implements Serializable{
 		double d = size - rulelen;
 		if (d == 0)
 			d = 0.01;
-		weight = conv /d;
-		//		weight = conv*rulelen;
+		//weight = conv /d;
+		weight = conv*rulelen;
 		return weight;
 	}
 

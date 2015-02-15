@@ -47,7 +47,7 @@ public class ACWV extends Classifier{
 			fp = new CCFP(m_instances, m_onlyClass,minsup, minconv, necSupport, ruleNumLimit, attrvalue);
 			headertable = fp.buildHeaderTable(numClass, necSupport);
 			t = fp.buildTree(headertable);
-			t.countnode();
+			//t.countnode();
 		}
 	}
 
@@ -104,13 +104,13 @@ public class ACWV extends Classifier{
 //		
 //		String[] arg7 ={"-t","pimaout.arff"};
 //		runClassifier(new ACWV(), arg7);
-//		
+		
 //		String[] arg8 ={"-t","taeout.arff"};
 //		runClassifier(new ACWV(), arg8);
 //		
 //		String[] arg9 ={"-t","habermanout.arff"};
 //		runClassifier(new ACWV(), arg9);
-//		
+		
 //		String[] arg10={"-t","glassout.arff"};
 //		runClassifier(new ACWV(), arg10);
 //		
@@ -137,7 +137,7 @@ public class ACWV extends Classifier{
 //		
 //		String[] arg18={"-t","autoout.arff"};
 //		runClassifier(new ACWV(), arg18);
-//		
+		
 //		String[] arg19={"-t","cleveout.arff"};
 //		runClassifier(new ACWV(), arg19);
 //		
@@ -183,8 +183,8 @@ public class ACWV extends Classifier{
 //		String[] arg33={"-t","sickout.arff"};
 //		runClassifier(new ACWV(), arg33);
 //		
-//		String[] arg34={"-t","horseout2.arff"};
-//		runClassifier(new ACWV(), arg34);
+		String[] arg34={"-t","horseout2.arff"};
+		runClassifier(new ACWV(), arg34);
 //		
 //		String[] arg35={"-t","annealout.arff"};
 //		runClassifier(new ACWV(), arg35);
