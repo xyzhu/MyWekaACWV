@@ -92,8 +92,8 @@ public class ACWV extends Classifier{
 
 
 	public static void main(String[] argv){
-		String[] arg ={"-t","tictest.arff"};
-		runClassifier(new ACWV(), arg);
+//		String[] arg ={"-t","tictest.arff"};
+//		runClassifier(new ACWV(), arg);
 
 //		String[] arg1 ={"-t","vehicleout.arff"};
 //		runClassifier(new ACWV(), arg1);
@@ -137,8 +137,8 @@ public class ACWV extends Classifier{
 //		String[] arg14={"-t","liverout.arff"};
 //		runClassifier(new ACWV(), arg14);
 //		
-//		String[] arg15={"-t","postout.arff"};
-//		runClassifier(new ACWV(), arg15);
+		String[] arg15={"-t","postout.arff"};
+		runClassifier(new ACWV(), arg15);
 //		
 //		String[] arg16={"-t","hypoout2.arff"};
 //		runClassifier(new ACWV(), arg16);

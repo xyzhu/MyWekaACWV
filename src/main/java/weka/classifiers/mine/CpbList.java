@@ -27,7 +27,6 @@ public class CpbList {
 		FastVector cpblist = new FastVector();
 		HeaderNode hn = (HeaderNode)headertable.elementAt(index);
 		Iterator<TreeNode> it = hn.link.iterator();//all the tree node linked to hn
-		System.out.println(hn.link.size());
 		TreeNode tn;
 		int count;
 		CpbItemSet cpbItem;

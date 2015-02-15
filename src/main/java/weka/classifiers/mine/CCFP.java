@@ -95,7 +95,6 @@ public class CCFP implements Serializable{
 			}
 			if(nofit)
 				continue;
-			System.out.println(hn.link.size());
 			cpblist = cpbList.genCpblist(instance, headertable, i);
 			ConCCFP cfp = new ConCCFP(cpblist, numClass);
 			FastVector conheadertable = cfp.buildConTreeHead(cpbList.hashAttribute.hashattr, instance, minsup, minconv, necSupport, attrvalue);
@@ -176,7 +175,7 @@ public class CCFP implements Serializable{
 			//from the last header node to the first
 			int size = headertable.size();
 			flag = true;
-			for(int i=size-1;i>=0;i--){
+			for(int i=0;i<size;i++){
 				hn = (HeaderNode)headertable.elementAt(i);
 				//for each class label cl, j is the index of cl
 				for(int j=0;j<numClass;j++){
@@ -216,11 +215,11 @@ public class CCFP implements Serializable{
 				len = curprefix.size();
 				for(int j=0;j<numClass;j++){	
 					if(hn.classcount[j]>necSupport){
+						nofit = false;
 						conv = compConv(hn,j);
 						if(conv>=minconv){
 							votePro[j] += calWeight(conv,len,numAttr);
 							numRule++;
-							nofit = false;
 						}
 						if(numRule>ruleNumLimit){
 							terminal = true;
