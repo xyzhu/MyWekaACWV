@@ -231,7 +231,7 @@ public class CCFP implements Serializable{
 	}
 	public FastVector buildHeaderTable(int numClass, int necSupport) throws Exception {
 		HeaderTable ht = new HeaderTable();
-		FastVector headertable = ht.buildTreeHead(instances, numClass, necSupport);
+		FastVector headertable = ht.buildTreeHead(instances, onlyClass, numClass, necSupport);
 		return headertable;
 	}
 }

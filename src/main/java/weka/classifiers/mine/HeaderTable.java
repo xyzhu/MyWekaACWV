@@ -9,36 +9,36 @@ import weka.core.Instances;
 
 public class HeaderTable {
 
-	public FastVector buildTreeHead(Instances instances, int numClass, int necSupport) throws Exception{
+	public FastVector buildTreeHead(Instances instances, Instances onlyclass, int numClass, int necSupport) throws Exception{
 		FastVector kSets;
 
 		// find item sets of length one
-		kSets = ItemSet.singletons(instances);
-		upDateCounters(kSets, instances);
+		kSets = ClassCountItemSet.singletons(instances, numClass);
+		upDateCounters(kSets, instances, onlyclass);
 		// check if a item set of length one is frequent, if not delete it
-		kSets = ItemSet.deleteItemSets(kSets, necSupport,
-				instances.numInstances());
+		kSets = ClassCountItemSet.deleteClassCountItemSets(kSets, necSupport,
+				instances.numInstances(), numClass);
 		if (kSets.size() == 0)
 			return null;
 		FastVector ht = Transform(kSets, numClass);
 		quicksort(ht,0,ht.size()-1);
 		return ht;
 	}
-	private void upDateCounters(FastVector itemSets, Instances instances) {
+	private void upDateCounters(FastVector itemSets, Instances instances, Instances onlyClass) {
 		for (int i = 0; i < instances.numInstances(); i++) {
 			Enumeration enu = itemSets.elements();
 			while (enu.hasMoreElements()) 
-				((ItemSet)enu.nextElement()).upDateCounter(instances.instance(i));
+				((ClassCountItemSet)enu.nextElement()).upDateCounter(instances.instance(i), (int)(onlyClass.instance(i).value(0)));
 		}
 
 	}
 	private FastVector Transform(FastVector kSets, int numClass) {
 		FastVector ht = new FastVector();
-		ItemSet ls;
+		ClassCountItemSet ls;
 		HeaderNode hn;
 		for(int i=0;i<kSets.size();i++){
 			hn = new HeaderNode(numClass);
-			ls = (ItemSet) kSets.elementAt(i);
+			ls = (ClassCountItemSet) kSets.elementAt(i);
 			int items[] = ls.items();
 			for(int k=0;k<items.length;k++){
 				if (items[k]!=-1){

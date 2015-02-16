@@ -138,8 +138,8 @@ public class ACWV extends Classifier{
 //		String[] arg18={"-t","autoout.arff"};
 //		runClassifier(new ACWV(), arg18);
 		
-//		String[] arg19={"-t","cleveout.arff"};
-//		runClassifier(new ACWV(), arg19);
+		String[] arg19={"-t","cleveout.arff"};
+		runClassifier(new ACWV(), arg19);
 //		
 //		String[] arg20={"-t","diabetesout.arff"};
 //		runClassifier(new ACWV(), arg20);
@@ -183,8 +183,8 @@ public class ACWV extends Classifier{
 //		String[] arg33={"-t","sickout.arff"};
 //		runClassifier(new ACWV(), arg33);
 //		
-		String[] arg34={"-t","horseout2.arff"};
-		runClassifier(new ACWV(), arg34);
+//		String[] arg34={"-t","horseout2.arff"};
+//		runClassifier(new ACWV(), arg34);
 //		
 //		String[] arg35={"-t","annealout.arff"};
 //		runClassifier(new ACWV(), arg35);
